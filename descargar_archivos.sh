@@ -11,3 +11,4 @@ curl https://www.bcu.gub.uy/Servicios-Financieros-SSF/AFAPSeries/afesenvalorcuot
 curl https://www.bcu.gub.uy/Servicios-Financieros-SSF/AFAPSeries/afesenvalorcuotapromediomes.xls --output ./data/valorcuotapromediomes.xls
 
 curl https://www.bcu.gub.uy/Servicios-Financieros-SSF/AFAPSeries/afesenfap.xls --output ./data/fap.xls
+

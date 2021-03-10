@@ -10,16 +10,19 @@ library(scales)
 # Estos guarismos se toman como 
 # insumo para el cálculo de las rentabilidades reales. 
 
-load(here::here('data', 'series.RData'))
+valor_cuota <- readRDS(here::here('data', 'valor_cuota_promediomes.rds'))
 
 
-# Capital: BCU ANUAL
-rentabilidad_nominal %>% 
-  select(ano_mes, capital)
+# CESS
+rentabilidad_nominal_cess <- valor_cuota %>% 
+  group_by(administradora) %>% 
+  mutate(rentabilidad_nominal= 100 * (valor_cuota/lag(valor_cuota, 12) - 1)) %>% 
+  filter(ano_mes > as.Date("1997-06-01")) %>% 
+  ungroup() %>% 
+  mutate(fuente="cess")
 
-# Elaboracion Propia
-valor_cuota %>% 
-  select(ano_mes, capital) %>% 
-  mutate(rent_nominal_capital= capital/lag(capital, 12) - 1,
-         rentabilidad        = percent_format(accuracy=0.1)(rent_nominal_capital)) %>% 
-  filter(year(ano_mes) == 1997)
+
+saveRDS(rentabilidad_nominal_cess, 
+        file = here::here("data", "rentabilidad_nominal_cess.rds"))
+
+
