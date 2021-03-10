@@ -27,6 +27,7 @@ rentabilidad_real_total <- here::here('data', 'rentareal.xls') %>%
 valor_cuota <- here::here('data', 'valorcuotapromediomes.xls') %>%
   read_xls(sheet="FONDO DE AHORRO PREVISIONAL", range="A9:J227") %>% 
   mutate(`AÑO MES`=ym(`AÑO MES`)) %>% 
+  select(-2) %>% 
   clean_names()
 
 # Rentabilidad bruta nominal
@@ -42,4 +43,7 @@ fap <- here::here('data', 'fap.xls') %>%
   mutate(`AÑO MES`=ym(`AÑO MES`)) %>% 
   clean_names() %>% 
   select(-2)
+
+save(fap, rentabilidad_nominal, valor_cuota,
+     rentabilidad_real_total, file = here::here('data', 'series.RData'))
   
