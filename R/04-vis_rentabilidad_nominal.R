@@ -14,9 +14,10 @@ rentabilidad_nominal_bcu  %>%
 ggsave(here::here('output', 'rentabilidad_nominal_bcu.png'))
 
 
-rentabilidad_nominal_cess <- readRDS(here::here("data", "rentabilidad_nominal_cess.rds"))%>% 
+rentabilidad_nominal_cess <- readRDS(here::here("data", "rentabilidad_nominal_cess_96_14.rds"))%>% 
   filter(administradora %in% c("afap_sura", "integracion",
-                               "republica", "union_capital"))
+                               "republica", "union_capital")) %>% 
+  select(-valor_cuota)
 
 # Graficar
 rentabilidad_nominal_cess  %>% 
@@ -29,18 +30,18 @@ rentabilidad_nominal_cess  %>%
 ggsave(here::here('output', 'rentabilidad_nominal_cess.png'))
 
 
-# Pegar para graficar
-rentabilidad_nominal_comparada <- rentabilidad_nominal_cess %>%
-  select(ano_mes, administradora, rentabilidad_nominal, fondo) %>% 
-  mutate(rentabilidad_nominal = rentabilidad_nominal * 100 ) %>% 
-  left_join(select(rentabilidad_nominal_bcu, 
-                   fondo, ano_mes, rentabilidad_nominal), 
-            by=c("ano_mes", "administradora")) %>% 
-  mutate(diff=rentabilidad_nominal.x-rentabilidad_nominal.y)
 
+juntos <- bind_rows(rentabilidad_nominal_bcu,
+                    rentabilidad_nominal_cess) %>% 
+  arrange(ano_mes, administradora) %>% 
+  filter(ano_mes<as.Date("2014-08-01"))
 
+juntos %>% 
+  pivot_wider(id_cols=c(ano_mes, administradora),
+              names_from=fuente,
+              values_from=rentabilidad_nominal) %>% 
+  ggplot(aes(BCU, cess)) + 
+  geom_point() + 
+  facet_wrap(~year(ano_mes), scale="free")
 
-
-ggsave(here::here("output", "rentabilidad_bruta_scatter.png"))
-
-
+ggsave(here::here('output', 'rentabilidad_nominal.png'))

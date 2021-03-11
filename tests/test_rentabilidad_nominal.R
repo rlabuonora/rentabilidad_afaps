@@ -4,7 +4,7 @@ library(tibble)
 library(dplyr)
 
 rentabilidad_nominal_cess_96_14 <- readRDS(here::here("data", "rentabilidad_nominal_cess_96_14.rds"))
-#rentabilidad_nominal_cess_14_20 <- tibble(ano_mes, administradora, fondo, rentabilidad_nominal)
+rentabilidad_nominal_cess_14_20 <- readRDS(here::here("data", "rentabilidad_nominal_cess_14_20.rds"))
 
 test_that("1997", {
   expected <- tibble(
@@ -111,12 +111,11 @@ test_that("2013", {
 })
 
 test_that("2014: Acumulación", {
-  skip("Not implemented")
   expected <- tibble(
     ano_mes = as.Date("2014-08-01"),
     administradora=c("afap_sura", "integracion", 
-                     "republica", "union_capital", 
-                     "sistema"),
+                     "republica", "sistema", 
+                     "union_capital"),
     fondo="Acumulación",
     rentabilidad_nominal = c(14.1,	13.8,	13.3,	13.9,	13.6))
   
@@ -130,19 +129,18 @@ test_that("2014: Acumulación", {
 })
 
 test_that("2014: Retiro", {
-  skip("Not implemented")
   expected <- tibble(
     ano_mes = as.Date("2014-08-01"),
     administradora=c("afap_sura", "integracion", 
-                     "republica", "union_capital", 
-                     "sistema"),
+                     "republica", "sistema", 
+                     "union_capital"),
     fondo="Retiro",
     rentabilidad_nominal = c(14.1,	13.9,	13.4,	14.1,	13.7))
   
   actual <- rentabilidad_nominal_cess_14_20 %>% 
     filter(year(ano_mes) == 2014, month(ano_mes) ==8, 
            fondo=="Retiro") %>% 
-    select(ano_mes, administradora, rentabilidad_nominal)
+    select(ano_mes, administradora, fondo, rentabilidad_nominal)
   
   expect_equal(expected, actual, tolerance=.5)
   
