@@ -3,7 +3,8 @@ library(tidyverse)
 
 ur <- read_xls(here::here('data', 'xls', 'ur.xls'), range="A7:B637") %>% 
   clean_names() %>% 
-  rename(ano_mes=1, ur=2)
+  rename(ano_mes=1, ur=2) %>% 
+  mutate(ano_mes=as.Date(ano_mes))
 
 saveRDS(ur, here::here("data", "rds", "ur.rds"))
 
