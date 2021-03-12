@@ -1,3 +1,6 @@
+library(here)
+library(janitor)
+library(lubridate)
 
 # Rentabilidad en ur
 rentabilidad_ur_acumulacion <- here::here('data', 'rentareal.xls') %>%
@@ -35,4 +38,4 @@ rentabilidad_real_ur <- bind_rows(rentabilidad_ur_total,
                                   rentabilidad_ur_acumulacion)
 
 saveRDS(rentabilidad_real_ur, 
-        file=here::here('data', 'rentabilidad_ur.rds'))
+        file=here::here('data', 'rentabilidad_ur_bcu.rds'))

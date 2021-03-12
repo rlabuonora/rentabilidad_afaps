@@ -29,6 +29,8 @@ saveRDS(rentabilidad_nominal_cess_96_14,
 
 # CESS 2014-2020
 
+# Armar el valor cuota con fondos Retiro y Acumulación duplicados
+# para antes de 2014
 # Tomar datos 96-2013
 valor_cuota_fap <- valor_cuota %>% 
   filter(fondo=="FAP")
@@ -46,6 +48,11 @@ valor_cuota_total <- bind_rows(
   valor_cuota_fap_acumulacion,
   filter(valor_cuota, fondo %in% c("Retiro", "Acumulación"))
 )
+
+saveRDS(valor_cuota_total, 
+        file = here::here("data", "valor_cuota_total.rds"))
+
+
 
 # Todos tienen 2
 valor_cuota_total %>% 

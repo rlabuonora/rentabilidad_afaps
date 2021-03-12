@@ -80,6 +80,8 @@ valor_cuota_promedio <- bind_rows(valor_cuota_fap,
 
 
 
+
+
 saveRDS(valor_cuota_promedio, 
      file = here::here('data', 'valor_cuota_promediomes.rds'))
   

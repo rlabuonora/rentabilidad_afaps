@@ -31,6 +31,4 @@ rentabilidad_nominal_bcu <- readRDS(here::here(
   "data", "rentabilidad_nominal_bcu.rds"
 ))
 
-ur <- read_xls(here::here('data', 'ur.xls'), range="A5:B637") %>% 
-  clean_names() %>% 
-  rename(ano_mes=1, ur=2)
+
