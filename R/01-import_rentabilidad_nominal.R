@@ -1,7 +1,10 @@
-
+library(readxl)
+library(lubridate)
+library(here)
+library(janitor)
 
 # Rentabilidad bruta nominal
-rentabilidad_nominal_total <- here::here('data', 'rentnominal.xls') %>%
+rentabilidad_nominal_total <- here::here('data', 'xls', 'rentnominal.xls') %>%
   read_xls(sheet="TOTAL", range="A9:K216") %>% 
   mutate(`AÑO MES`=ym(`AÑO MES`)) %>% 
   clean_names() %>% 
@@ -11,7 +14,7 @@ rentabilidad_nominal_total <- here::here('data', 'rentnominal.xls') %>%
                values_to="rentabilidad_nominal") %>% 
   mutate(fondo="FAP")
 
-rentabilidad_nominal_retiro <- here::here('data', 'rentnominal.xls') %>%
+rentabilidad_nominal_retiro <- here::here('data', 'xls', 'rentnominal.xls') %>%
   read_xls(sheet="Subfondo Retiro", range="A9:G86") %>% 
   mutate(`AÑO MES`=ym(`AÑO MES`)) %>% 
   clean_names() %>% 
@@ -21,7 +24,7 @@ rentabilidad_nominal_retiro <- here::here('data', 'rentnominal.xls') %>%
                values_to="rentabilidad_nominal") %>% 
   mutate(fondo="Retiro")
 
-rentabilidad_nominal_acumulacion <- here::here('data', 'rentnominal.xls') %>%
+rentabilidad_nominal_acumulacion <- here::here('data', 'xls', 'rentnominal.xls') %>%
   read_xls(sheet="Subfondo Acumulación", range="A9:G86") %>% 
   mutate(`AÑO MES`=ym(`AÑO MES`)) %>% 
   clean_names() %>% 
@@ -37,7 +40,8 @@ rentabilidad_nominal_bcu <- bind_rows(rentabilidad_nominal_total,
                                   rentabilidad_nominal_acumulacion) %>% 
   mutate(fuente="BCU")
 
-saveRDS(rentabilidad_nominal_bcu, here::here('data', 'rentabilidad_nominal_bcu.rds'))
+saveRDS(rentabilidad_nominal_bcu, here::here('data', 'rds', 'rentabilidad_nominal_bcu.rds'))
+
 # Rentabilidad Real
 # rentabilidad_real_total <- here::here('data', 'rentareal.xls') %>%
 #   read_xls(sheet="Total", range="A9:K216") %>% 

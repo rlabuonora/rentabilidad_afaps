@@ -10,21 +10,19 @@ library(scales)
 # Estos guarismos se toman como 
 # insumo para el cálculo de las rentabilidades reales. 
 
-valor_cuota <- readRDS(here::here('data', 'valor_cuota_promediomes.rds'))
+valor_cuota_total <- readRDS(here::here('data', 'rds', 'valor_cuota_total.rds'))
 
 
 # CESS: 1996-2014
-rentabilidad_nominal_cess_96_14 <- valor_cuota %>% 
-  group_by(administradora) %>% 
+rentabilidad_nominal_cess <- valor_cuota_total %>% 
+  group_by(administradora, fondo) %>% 
   mutate(rentabilidad_nominal= 100 * (valor_cuota/lag(valor_cuota, 12) - 1)) %>% 
-  filter(ano_mes > as.Date("1997-06-01")) %>% 
-  filter(ano_mes < as.Date("2014-01-01")) %>% 
   ungroup() %>% 
   mutate(fuente="cess")
 
 
-saveRDS(rentabilidad_nominal_cess_96_14, 
-        file = here::here("data", "rentabilidad_nominal_cess_96_14.rds"))
+saveRDS(rentabilidad_nominal_cess, 
+        file = here::here("data", "rds", "rentabilidad_nominal_cess.rds"))
 
 
 # CESS 2014-2020
@@ -32,25 +30,7 @@ saveRDS(rentabilidad_nominal_cess_96_14,
 # Armar el valor cuota con fondos Retiro y Acumulación duplicados
 # para antes de 2014
 # Tomar datos 96-2013
-valor_cuota_fap <- valor_cuota %>% 
-  filter(fondo=="FAP")
 
-# Duplicarlos con los dos fondos
-valor_cuota_fap_retiro <- valor_cuota_fap %>% 
-  mutate(fondo="Retiro")
-
-valor_cuota_fap_acumulacion <- valor_cuota_fap %>% 
-  mutate(fondo="Acumulación")
-
-# Juntar todo
-valor_cuota_total <- bind_rows(
-  valor_cuota_fap_retiro,
-  valor_cuota_fap_acumulacion,
-  filter(valor_cuota, fondo %in% c("Retiro", "Acumulación"))
-)
-
-saveRDS(valor_cuota_total, 
-        file = here::here("data", "valor_cuota_total.rds"))
 
 
 
