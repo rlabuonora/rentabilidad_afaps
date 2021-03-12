@@ -36,23 +36,26 @@ df <- bind_rows(
     ),
     fuente = case_when(
       fuente=="BCU"~ "BCU",
-      fuente== "rentabilidad_ur_simple"~"Indice Simple",
-      fuente=="rentabilidad_ur_indice"~"Capitalización Compuesta"
+      fuente== "rentabilidad_ur_simple"~"Rentabilidad Simple",
+      fuente=="rentabilidad_ur_indice"~"Índice con Capitalización Compuesta"
     )
   ) %>% 
   ggplot(aes(x=ano_mes, color=administradora)) + 
   geom_line(aes(y=rentabilidad_ur)) +
-  scale_x_date(date_breaks="2 years", date_labels='%Y') +
   facet_wrap(~fuente, ncol=1) +
   scale_y_continuous(labels=scales::percent_format(scale=1)) +
   scale_color_discrete("") +
   geom_vline(xintercept = as.Date("2014-01-01"), 
              linetype="dashed",
              color="gray") +
-  labs(title="Rentabilidad en UR", x="", y="") + 
+  labs(title="Rentabilidad en UR", 
+       caption="Antes de 2014 la serie BCU usa un índice simple de rentabilidad, 
+       a partir de 2014 usa el índice anualizado compuesto (Art. 21 de la ley 19.162)",
+       x="", y="") + 
   theme(
     legend.position = "bottom",
-    text = element_text(size=6)
+    text = element_text(size=8),
+    plot.title = element_text(hjust=.5)
   )
 
 
