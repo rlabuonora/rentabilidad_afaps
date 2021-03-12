@@ -36,8 +36,8 @@ df <- bind_rows(
     ),
     fuente = case_when(
       fuente=="BCU"~ "BCU",
-      fuente== "rentabilidad_ur_simple"~"Rentabilidad Simple",
-      fuente=="rentabilidad_ur_indice"~"Índice con Capitalización Compuesta"
+      fuente== "rentabilidad_ur_simple"~"Variación Anual Simple",
+      fuente=="rentabilidad_ur_indice"~"Variación 36 Meses Anualizada"
     )
   ) %>% 
   ggplot(aes(x=ano_mes, color=administradora)) + 

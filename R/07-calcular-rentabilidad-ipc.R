@@ -14,10 +14,11 @@ rentabilidad_ipc_cess <- valor_cuota_total %>%
   mutate(valor_cuota_ipc = valor_cuota/ipc) %>% 
   group_by(administradora, fondo) %>% 
   # Aplicar formula del indice de rentabilidad
-  mutate(rentabilidad_ipc_indice =
-           (valor_cuota_ipc/lag(valor_cuota_ipc, 36))^(1/3)) %>% 
+  mutate(rentabilidad_ipc_indice = 100 * 
+           (((valor_cuota_ipc/lag(valor_cuota_ipc, 36))^(1/3)) - 1)) %>%  
   mutate(rentabilidad_ipc_simple =
-           100 * (valor_cuota_ipc/lag(valor_cuota_ipc, 12) - 1))
+           100 * (valor_cuota_ipc/lag(valor_cuota_ipc, 12) - 1)) %>% 
+  ungroup()
 
 # Salvar
 saveRDS(rentabilidad_ipc_cess, 
