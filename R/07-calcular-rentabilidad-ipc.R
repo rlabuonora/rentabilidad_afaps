@@ -1,5 +1,6 @@
 ## Calcula las rentabilidades usando el ipc
-
+library(WriteXLS)
+library(tidyverse)
 # Cargar IPC
 ipc <- readRDS(here::here('data', 'rds', 'ipc.rds'))
 
@@ -20,6 +21,15 @@ rentabilidad_ipc_cess <- valor_cuota_total %>%
            100 * (valor_cuota_ipc/lag(valor_cuota_ipc, 12) - 1)) %>% 
   ungroup()
 
-# Salvar
+# Salvar RDS
 saveRDS(rentabilidad_ipc_cess, 
         here::here('data', 'rds', 'rentabilidad_ipc_cess.rds'))
+
+# Salvar Excel
+rentabilidad_ipc_cess %>% 
+  # fondo Acumulación
+  filter(fondo=="Acumulación") %>%
+  # Índice 36 meses
+  select(ano_mes, administradora, rentabilidad_ipc_indice) %>% 
+  pivot_wider(names_from=administradora, values_from=rentabilidad_ipc_indice) %>% 
+  WriteXLS(here::here('output', 'rentabilidad_ipc.xls'))
