@@ -30,7 +30,8 @@ saveRDS(rentabilidad_ipc_cess,
 # Acumulacion
 acumulacion <- rentabilidad_ipc_cess %>% 
   filter(administradora %in% c("afap_sura", "integracion",
-                             "republica", "union_capital")) %>% 
+                             "republica", "union_capital", 
+                             "sistema")) %>% 
   filter(month(ano_mes)==12, fondo=="Acumulación") %>% 
   select(ano_mes, administradora, rentabilidad_ipc_indice, fondo) %>% 
   pivot_wider(names_from="administradora", values_from="rentabilidad_ipc_indice") %>% 
@@ -41,7 +42,8 @@ acumulacion <- rentabilidad_ipc_cess %>%
 
 retiro <- rentabilidad_ipc_cess %>% 
   filter(administradora %in% c("afap_sura", "integracion",
-                               "republica", "union_capital")) %>% 
+                               "republica", "union_capital",
+                               "sistema")) %>% 
   filter(month(ano_mes)==12, fondo=="Retiro") %>% 
   select(ano_mes, administradora, rentabilidad_ipc_indice, fondo) %>% 
   pivot_wider(names_from="administradora", values_from="rentabilidad_ipc_indice") %>% 
