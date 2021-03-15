@@ -18,5 +18,23 @@ rentabilidad_ur_cess <- valor_cuota_total %>%
 
 saveRDS(rentabilidad_ur_cess, here::here('data', 'rds', 'rentabilidad_ur_cess.rds'))
   
-  
+# Pegar la del BCU para verificar
 
+rentabilidad_ur_bcu <- readRDS(here::here("data", "rds", "rentabilidad_ur_bcu.rds")) %>% 
+  filter(administradora %in% c("afap_sura", "integracion",
+                               "republica", "union_capital")) %>% 
+  filter(fondo=="Acumulación") %>% 
+  rename(rentabilidad_ur_bcu=rentabilidad_ur) %>% 
+  select(ano_mes, rentabilidad_ur_bcu, administradora)
+
+rentabilidad_ur_comparada <- rentabilidad_ur_cess %>% 
+  filter(fondo=="Acumulación") %>% 
+  left_join(rentabilidad_ur_bcu, by=c("administradora", "ano_mes"))
+
+sura <- rentabilidad_ur_comparada %>% 
+  # filter(administradora %in% c("afap_sura", "integracion",
+  #                              "republica", "union_capital")) %>% 
+  filter(administradora=="afap_sura")
+
+ 
+WriteXLS(sura, ExcelFileName = here::here("output", "VerificarRentabilidadUR.xlsx"))
