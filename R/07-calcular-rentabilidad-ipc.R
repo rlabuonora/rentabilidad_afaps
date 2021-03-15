@@ -25,6 +25,36 @@ rentabilidad_ipc_cess <- valor_cuota_total %>%
 saveRDS(rentabilidad_ipc_cess, 
         here::here('data', 'rds', 'rentabilidad_ipc_cess.rds'))
 
+# Salida Formato
+
+# Acumulacion
+acumulacion <- rentabilidad_ipc_cess %>% 
+  filter(administradora %in% c("afap_sura", "integracion",
+                             "republica", "union_capital")) %>% 
+  filter(month(ano_mes)==12, fondo=="Acumulación") %>% 
+  select(ano_mes, administradora, rentabilidad_ipc_indice, fondo) %>% 
+  pivot_wider(names_from="administradora", values_from="rentabilidad_ipc_indice") %>% 
+  rename(`SURA AFAP` = afap_sura,
+         `Integración`=integracion,
+         `República AFAP`=republica,
+         `UNION CAPITAL`=union_capital)
+
+retiro <- rentabilidad_ipc_cess %>% 
+  filter(administradora %in% c("afap_sura", "integracion",
+                               "republica", "union_capital")) %>% 
+  filter(month(ano_mes)==12, fondo=="Retiro") %>% 
+  select(ano_mes, administradora, rentabilidad_ipc_indice, fondo) %>% 
+  pivot_wider(names_from="administradora", values_from="rentabilidad_ipc_indice") %>% 
+  rename(`SURA AFAP` = afap_sura,
+         `Integración`=integracion,
+         `República AFAP`=republica,
+         `UNION CAPITAL`=union_capital)
+
+
+WriteXLS(c("retiro", "acumulacion"), 
+         here::here('output', 'cuadro_rentabilidad_ipc.xls'))
+
+
 # Salvar Excel
 rentabilidad_ipc_cess %>% 
   # fondo Acumulación
