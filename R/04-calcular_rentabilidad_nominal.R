@@ -17,8 +17,7 @@ rentabilidad_nominal_cess <- valor_cuota_total %>%
   mutate(rentabilidad_nominal_simple= 100 * (valor_cuota/lag(valor_cuota, 12) - 1)) %>%
   mutate(rentabilidad_nominal_indice = 100 * 
            (((valor_cuota/lag(valor_cuota, 36))^(1/3)) - 1)) %>%
-  ungroup() %>% 
-  mutate(fuente="cess")
+  ungroup() 
 
 rentabilidad_nominal_bcu <- readRDS(here::here("data", "rds", "rentabilidad_nominal_bcu.rds")) %>% 
   filter(administradora %in% c("afap_sura", "integracion",
