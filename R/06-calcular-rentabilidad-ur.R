@@ -36,5 +36,21 @@ sura <- rentabilidad_ur_comparada %>%
   #                              "republica", "union_capital")) %>% 
   filter(administradora=="afap_sura")
 
+integracion <- rentabilidad_ur_comparada %>% 
+  # filter(administradora %in% c("afap_sura", "integracion",
+  #                              "republica", "union_capital")) %>% 
+  filter(administradora=="integracion")
+
+republica <- rentabilidad_ur_comparada %>% 
+  # filter(administradora %in% c("afap_sura", "integracion",
+  #                              "republica", "union_capital")) %>% 
+  filter(administradora=="republica")
+
+union_capital <- rentabilidad_ur_comparada %>% 
+  # filter(administradora %in% c("afap_sura", "integracion",
+  #                              "republica", "union_capital")) %>% 
+  filter(administradora=="union_capital")
+
  
-WriteXLS(sura, ExcelFileName = here::here("output", "VerificarRentabilidadUR.xlsx"))
+WriteXLS(c("sura", "integracion", "republica", "union_capital"), 
+           ExcelFileName = here::here("output", "VerificarRentabilidadUR.xlsx"))
