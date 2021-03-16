@@ -1,6 +1,7 @@
 ## Calcula las rentabilidades usando el ipc
 library(WriteXLS)
 library(tidyverse)
+library(lubridate)
 # Cargar IPC
 ipc <- readRDS(here::here('data', 'rds', 'ipc.rds'))
 
@@ -32,29 +33,35 @@ acumulacion <- rentabilidad_ipc_cess %>%
   filter(administradora %in% c("afap_sura", "integracion",
                              "republica", "union_capital", 
                              "sistema")) %>% 
-  filter(month(ano_mes)==12, fondo=="Acumulación") %>% 
+  #filter(month(ano_mes)==12) %>% 
+  filter(fondo=="Acumulación") %>% 
   select(ano_mes, administradora, rentabilidad_ipc_indice, fondo) %>% 
   pivot_wider(names_from="administradora", values_from="rentabilidad_ipc_indice") %>% 
-  rename(`SURA AFAP` = afap_sura,
+  rename(`SURA AFAP ` = afap_sura,
          `Integración`=integracion,
          `República AFAP`=republica,
-         `UNION CAPITAL`=union_capital)
+         `UNION CAPITAL`=union_capital) %>% 
+  select(-fondo, fondo) %>% 
+  filter(year(ano_mes) > 1999)
 
 retiro <- rentabilidad_ipc_cess %>% 
   filter(administradora %in% c("afap_sura", "integracion",
                                "republica", "union_capital",
                                "sistema")) %>% 
-  filter(month(ano_mes)==12, fondo=="Retiro") %>% 
+  #filter(month(ano_mes)==12) %>% 
+  filter(fondo=="Retiro") %>% 
   select(ano_mes, administradora, rentabilidad_ipc_indice, fondo) %>% 
   pivot_wider(names_from="administradora", values_from="rentabilidad_ipc_indice") %>% 
   rename(`SURA AFAP` = afap_sura,
          `Integración`=integracion,
          `República AFAP`=republica,
-         `UNION CAPITAL`=union_capital)
+         `UNION CAPITAL`=union_capital) %>% 
+  select(-fondo, fondo) %>% 
+  filter(year(ano_mes) > 1999)
 
 
 WriteXLS(c("retiro", "acumulacion"), 
-         here::here('output', 'cuadro_rentabilidad_ipc.xls'))
+         here::here('output', 'cuadro_rentabilidad_ipc.xlsx'))
 
 
 # Salvar Excel
@@ -64,4 +71,4 @@ rentabilidad_ipc_cess %>%
   # Índice 36 meses
   select(ano_mes, administradora, rentabilidad_ipc_indice) %>% 
   pivot_wider(names_from=administradora, values_from=rentabilidad_ipc_indice) %>% 
-  WriteXLS(here::here('output', 'rentabilidad_ipc.xls'))
+  WriteXLS(here::here('output', 'rentabilidad_ipc.xlsx'))
